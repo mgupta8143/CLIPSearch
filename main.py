@@ -32,9 +32,7 @@ def get_images_from_query(search_query, num_images):
     for i in range(num_images):
         idx = best_photos[i][1]
         photo_id = photo_ids[idx]
-
-        req = requests.get(photos.iloc[int(photo_id[3:])]["photo_image_url"], stream = True)
-        im = Image.open(req.raw)
+        im = Image.open("./images/" + photo_id + ".jpg")
         res.append(im)
 
     return res
@@ -43,7 +41,7 @@ def display_images(image_list):
     for image in image_list:
         image.show()
 
-images = get_images_from_query("A computer screen", 3)
+images = get_images_from_query("", 3)
 display_images(images)
 
 

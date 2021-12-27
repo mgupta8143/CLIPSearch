@@ -27,11 +27,10 @@ batch_size = 16
 features_path = Path("./features/")
 batches = math.ceil(len(photo_files) / batch_size)
 
-"""
 for i in range(batches):
     print(f"Processing batch {i+1}/{batches}")
-    batch_ids_path = Path(features_path + f"{i:010d}.csv")
-    batch_features_path = Path(features_path + f"{i:010d}.npy")
+    batch_ids_path = Path(features_path / f"{i:010d}.csv")
+    batch_features_path = Path(features_path /  f"{i:010d}.npy")
     if not batch_features_path.exists():
         try:
             batch_files = photo_files[i*batch_size : (i+1)*batch_size]
@@ -42,7 +41,6 @@ for i in range(batches):
             photo_ids_data.to_csv(batch_ids_path, index=False)
         except:
             print(f'Problem with batch {i}')
-"""
 
 
 features_list = [np.load(features_file) for features_file in sorted(features_path.glob("*.npy"))]
