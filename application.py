@@ -1,19 +1,19 @@
 from pathlib import Path
+from PIL import Image
 import numpy as np
 import pandas as pd
 import clip
 import torch
-#import boto3
+from flask import Flask, request
+import base64 
+from io import BytesIO
 
-#s3 = boto3.client('s3')
+application = Flask(__name__)
 
-## AWS Lambda Handler
-def get_images_from_query(event, context):
-    search_query = event["search_query"]
-    num_images = event["num_images"]
-
-    bucket = "clip_images"
-    features_path = "features/features.npy"
+@application.route("/get_images", methods=["POST"])
+def get_images_from_query():
+    params = request.get_json()
+    search_query, num_images = params["search_query"], params["num_images"]
 
     features_path = Path("./features")
     photo_features = np.load(features_path / "features.npy")
@@ -35,8 +35,12 @@ def get_images_from_query(event, context):
     for i in range(num_images):
         idx = best_photos[i][1]
         photo_id = photo_ids[idx]
-        res.append(photo_id)
+        im = Image.open("./images/" + photo_id + ".jpg")
+        buffer = BytesIO()
+        im.save(buffer,format="JPEG")                 
+        myimage = buffer.getvalue()                     
+        res.append(str(base64.b64encode(myimage)))
 
-    return res
+    return {"ids": res }
     
 

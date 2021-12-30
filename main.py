@@ -41,7 +41,7 @@ def display_images(image_list):
     for image in image_list:
         image.show()
 
-images = get_images_from_query("", 3)
+images = get_images_from_query("moon", 3)
 display_images(images)
 
 
